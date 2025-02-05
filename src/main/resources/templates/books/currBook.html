@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Current book</title>
+</head>
+<body>
+
+<p th:text="'Id: '+${book.getId()}"></p>
+<p th:text="'Name: '+${book.getName()}"></p>
+<p th:text="'Author: '+${book.getAuthor()}"></p>
+<p th:text="'Year: '+${book.getYear()}"></p>
+
+<hr/>
+
+<div th:if="${!hasOwner}">
+    <form th:method="PATCH" th:action="@{/books/{id}/addPerson(id=${book.getId()})}">
+        <label for="person">Choice person for this book: </label>
+        <!-- Впадающий список. Выбранное значение будет присвоено полю id объекта person -->
+        <select th:object="${person}" th:field="*{id}" id="person">
+            <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getName()}"></option>
+        </select>
+
+        <input type="submit" value="Add person"/>
+    </form>
+</div>
+
+<div th:if="${hasOwner}">
+    Now this book belongs to <a th:href="@{/people/{id}(id=${person.getId()})}" th:text="${person.getName()}"></a>
+    <br/>
+    <form th:method="PATCH" th:action="@{/books/{id}/delPerson(id=${book.getId()})}">
+        <input type="submit" value="Release this book"/>
+    </form>
+</div>
+
+<hr/>
+
+<form method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}">
+    <input type="submit" value="Edit"/>
+</form>
+
+<form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">
+    <input type="submit" value="Delete">
+</form>
+
+</body>
+</html>

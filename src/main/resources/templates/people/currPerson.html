@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Current person</title>
+</head>
+<body>
+
+<p th:text="'Id: ' + ${person.getId()}"></p>
+<p th:text="'Name: ' + ${person.getName()}"></p>
+<p th:text="'Year of birth: ' + ${person.getYear()}"></p>
+
+<hr/>
+
+<div th:if="${books.size()==0}">
+    <p>The person hasn't picked up any books yet</p>
+</div>
+
+<div th:if="${books.size()!=0}">
+    <p>Books: (if the book is highlighted in RED, then its return is overdue)</p>
+    <div th:each="book : ${books}">
+        <a th:href="@{/books/{id}(id=${book.getId()})}" th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"
+           th:style="${book.isOverdue() ? 'color:red' : 'color:black'}"></a>
+    </div>
+</div>
+
+<hr/>
+
+<form method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
+    <input type="submit" value="Edit"/>
+</form>
+
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+    <input type="submit" value="Delete">
+</form>
+
+</body>
+</html>
